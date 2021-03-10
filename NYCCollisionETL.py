@@ -21,9 +21,7 @@ r = requests.get(url)
 rContent=r.content
 pd.set_option('display.max_columns', None)
 deathCausesdf = pd.read_csv(io.StringIO(rContent.decode('utf-8')),nrows=10);
-#print(deathCausesdf)
 
-print("**********************Car Collisions*************************")
 
 ## insert data into time dimension
 #extract time from the dataset
@@ -64,9 +62,6 @@ contributingFactorDF=pd.concat(frames, names='contributing_factor', ignore_index
 contributingFactorDF=pd.DataFrame(contributingFactorDF,columns=['contributing_factor'])
 contributingFactorDF=contributingFactorDF.drop_duplicates(subset='contributing_factor')
 contributingFactorDF['contributing_factor_id']=[(i+1000) for i in contributingFactorDF.index]
-#print(contributingFactorDF.shape)
-#contributingFactorDF=contributingFactorDF.set_index(pd.Index(range(0,37)))
-#print(contributingFactorDF)
 
 #Loading the contributing factor dimension to the datawraehouse  
 contributingFactorDF.to_sql('contributing_factor', con = engine, if_exists = 'replace', chunksize = 100, index=False);
@@ -115,8 +110,6 @@ place.to_sql('place', con = engine, if_exists = 'replace', chunksize = 100, inde
 pd.set_option('display.max_columns', None)
 
 
-print("***********************************************")
-print("********************** Collision Crashes*************************")
 #Extract collision dataset using Api(we passes the coulmn names parameters in the url select=..) 
 url="https://data.cityofnewyork.us/resource/h9gi-nx95.csv?$select=zip_code,collision_id,crash_date,crash_time,contributing_factor_vehicle_1,contributing_factor_vehicle_2,contributing_factor_vehicle_3,borough,latitude,longitude,number_of_persons_injured,number_of_persons_killed,number_of_pedestrians_injured,number_of_pedestrians_killed,number_of_cyclist_injured,number_of_cyclist_killed,number_of_motorist_injured,number_of_motorist_killed"
 r = requests.get(url)
@@ -136,8 +129,6 @@ collisionCrashes['longitude']=collisionCrashes['longitude'].fillna(1)
 
 collisionCrashes['place_id']=collisionCrashes['zip_code']+collisionCrashes['latitude']+collisionCrashes['longitude']
 
-print("***********************************************")
-print("********************** Collision vehicles*************************")
 #Extract collision vehicles dataset using Api(we passes the coulmn names parameters in the url select=..) 
 
 url="https://data.cityofnewyork.us/resource/bm4k-52h4.csv?$select=vehicle_id,collision_id,vehicle_type, vehicle_make,vehicle_model,vehicle_year"
@@ -147,10 +138,10 @@ rContent=r.content
 pd.set_option('display.max_columns', None)
 vehicle = pd.read_csv(io.StringIO(rContent.decode('utf-8')));
 
-print("***********************************************")
-print("********************** race*************************")
 
+#extract data about race
 
+#url Endpoint
 url="https://data.cityofnewyork.us/resource/kku6-nxdu.csv?$select=jurisdiction_name,percent_pacific_islander,percent_hispanic_latino,percent_american_indian,percent_asian_non_hispanic,percent_white_non_hispanic,percent_black_non_hispanic,percent_other_ethnicity"
 
 r = requests.get(url)
