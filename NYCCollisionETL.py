@@ -1,7 +1,10 @@
 Created on Tue Oct 20 01:37:24 2020
 
 @author: mohamed
+
 """
+#this Script extracts the data from multipe accidents data sources, transform it, and load it to the data warehouse
+
 #import libraries
 import requests
 import pandas as pd
